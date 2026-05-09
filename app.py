@@ -659,7 +659,7 @@ with info_col:
             return f"background-color:{c}22; color:{c}; font-weight:700"
 
         styled = (df.style
-                  .applymap(color_cluster, subset=["Cluster"])
+                  .map(color_cluster, subset=["Cluster"])
                   .format({"Seg (m)": "{:,}", "Total (m)": "{:,}"})
                   .set_properties(**{"font-size": "0.78rem"}))
 
