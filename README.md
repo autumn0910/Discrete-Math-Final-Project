@@ -81,7 +81,7 @@ streamlit run app.py
 ---
 
 ## Team
-Tran Hoang Phi Bao
+Tran Hoang Phi Bao &
 Nguyen Phuc Minh Anh
 
 **Course:** MATH202 – Discrete Mathematics
