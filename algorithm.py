@@ -14,11 +14,18 @@ def get_mst(graph):
     mst = nx.minimum_spanning_tree(graph, weight='weight')
     return mst
 
-def get_delivery_route(mst, start_node="Entrance_Main"):
-    """Generates the delivery sequence using a Pre-order DFS traversal."""
-    # Convert the generator to a list for easy usage
-    route = list(nx.dfs_preorder_nodes(mst, source=start_node))
-    return route
+def get_delivery_route(mst, start_node, required_stops):
+    """Generates the delivery sequence, filtering out intersection/road nodes."""
+    # 1. Get the raw DFS path (which includes roads)
+    raw_route = list(nx.dfs_preorder_nodes(mst, source=start_node))
+    
+    # 2. Filter it! Only keep nodes that are in our required stops (plus the start)
+    final_route = []
+    for node in raw_route:
+        if node in required_stops or node == start_node:
+            final_route.append(node)
+            
+    return final_route
 
 def calculate_route_cost(original_graph, route):
     """
