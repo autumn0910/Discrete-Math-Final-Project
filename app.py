@@ -265,6 +265,30 @@ hr { border-color: var(--border) !important; }
 nodes_pos, raw_edges, nodes_info = get_graph_data()
 G = build_graph(raw_edges)
 
+# 🛑 FIX: Force buildings to be dead-ends (Leaf Nodes)
+for node in list(G.nodes()):
+    if nodes_info[node]["cluster"] != "Road":
+        edges = list(G.edges(node, data=True))
+        if len(edges) > 1:
+            # Keep only the shortest walkway to the main road
+            best_edge = min(edges, key=lambda x: x[2]["weight"])
+            # Remove all other fake "through-routes"
+            for e in edges:
+                if e[:2] != best_edge[:2] and e[:2] != (best_edge[1], best_edge[0]):
+                    G.remove_edge(e[0], e[1])
+
+def get_strict_dist(u, v):
+    """Calculates distance without routing through other buildings."""
+    road_nodes = [n for n in G.nodes if nodes_info[n]["cluster"] == "Road"]
+    safe_G = G.subgraph(road_nodes + [u, v]) # Only roads + the 2 targets!
+    return nx.shortest_path_length(safe_G, source=u, target=v, weight="weight")
+
+def get_strict_path(u, v):
+    """Gets the actual map coordinates without routing through other buildings."""
+    road_nodes = [n for n in G.nodes if nodes_info[n]["cluster"] == "Road"]
+    safe_G = G.subgraph(road_nodes + [u, v])
+    return nx.shortest_path(safe_G, source=u, target=v, weight="weight")
+
 # Tách buildings và intersections
 all_buildings  = sorted([n for n in nodes_pos if not n.startswith("Inters_")])
 by_cluster     = {}
@@ -318,12 +342,28 @@ with st.sidebar:
     st.divider()
 
     st.markdown('<div class="section-label">Settings</div>', unsafe_allow_html=True)
+    
+    START_OPTIONS = [
+        "Entrance_Main", 
+        "Inters_pt_ad1", 
+        "Inters_ad2_ad3", 
+        "Inters_ad3_ad5", 
+        "Inters_ad_ad5"
+    ]
+    
     start_node = st.selectbox(
         "Start point",
-        ["Entrance_Main"] + selected_nodes,
+        START_OPTIONS + selected_nodes,
         index=0,
     )
+    
     show_all_edges = st.toggle("Show all graph edges", value=False)
+    show_mst = st.toggle("Show MST lines", value=True)
+    show_route = st.toggle("Show Delivery Route", value=True)
+
+    st.divider()
+    st.markdown('<div class="section-label">Compare Algorithms</div>', unsafe_allow_html=True)
+    algo_choice = st.radio("Select Algorithm to display:", ["Kruskal", "Prim"], horizontal=True)
 
     st.markdown("""
     <div class="info-tip">
@@ -347,36 +387,36 @@ if len(selected_nodes) < 2:
 # ── Compute ───────────────────────────────────────────────────────────────────
 result = None
 if compute and len(selected_nodes) >= 2:
-    # Build a virtual subgraph: selected buildings + all intersections,
-    # but connect every pair of selected buildings via their shortest path
-    # in the full graph so the subgraph is always connected.
-    relevant = set(selected_nodes) | {n for n in nodes_pos if n.startswith("Inters_")}
-    relevant.add(start_node)
-    subG = G.subgraph(relevant).copy()
-
-    # If the subgraph is disconnected, add virtual edges between selected nodes
-    # using full-graph shortest-path distances so MST stays scoped to our nodes.
-    if not nx.is_connected(subG):
-        targets = list(selected_nodes) + ([start_node] if start_node not in selected_nodes else [])
-        for i, u in enumerate(targets):
-            for v in targets[i+1:]:
-                if not subG.has_edge(u, v):
-                    try:
-                        dist = nx.shortest_path_length(G, source=u, target=v, weight="weight")
-                        subG.add_edge(u, v, weight=dist, virtual=True)
-                    except nx.NetworkXNoPath:
-                        pass
-
-    work_graph = subG
+    
+# 1. Define our mandatory stops (Start + Selected Buildings)
+    targets = list(selected_nodes)
+    if start_node not in targets:
+        targets.insert(0, start_node)
+        
+    # 2. Build a brand new "Target Graph" 
+    work_graph = nx.Graph()
+    for node in targets:
+        work_graph.add_node(node)
+        
+    # 3. Connect every target to every other target using the SHORTEST real route
+    for i, u in enumerate(targets):
+        for v in targets[i+1:]:
+            try:
+                # Calculate true driving distance using the FULL map (G)
+                dist = nx.shortest_path_length(G, source=u, target=v, weight="weight")
+                work_graph.add_edge(u, v, weight=dist)
+            except nx.NetworkXNoPath:
+                pass
 
     kruskal_mst = nx.minimum_spanning_tree(work_graph, algorithm="kruskal", weight="weight")
     prim_mst    = nx.minimum_spanning_tree(work_graph, algorithm="prim",    weight="weight")
 
-    k_route = get_delivery_route(kruskal_mst, start_node=start_node)
-    p_route = get_delivery_route(prim_mst,    start_node=start_node)
+    k_route = get_delivery_route(kruskal_mst, start_node=start_node, required_stops=selected_nodes)
+    p_route = get_delivery_route(prim_mst,    start_node=start_node, required_stops=selected_nodes)
 
-    k_cost = calculate_route_cost(G, k_route)
-    p_cost = calculate_route_cost(G, p_route)
+    # UPDATED: Calculate cost manually using strict distance!
+    k_cost = sum(get_strict_dist(k_route[i], k_route[i+1]) for i in range(len(k_route)-1))
+    p_cost = sum(get_strict_dist(p_route[i], p_route[i+1]) for i in range(len(p_route)-1))
 
     result = {
         "kruskal": {"mst": kruskal_mst, "route": k_route, "cost": k_cost,
@@ -432,41 +472,62 @@ with map_col:
             ).add_to(fmap)
 
     # MST + route nếu đã tính
+    # MST + route nếu đã tính
     if result:
-        best_data = result[result["best"]]
+    # Get the data for the algorithm the user selected!
+        selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
+        active_data = result[selected_key]
 
-        # MST edges — Liberty blue, clean
-        for u, v, d in best_data["mst"].edges(data=True):
-            if u in nodes_pos and v in nodes_pos:
-                folium.PolyLine(
-                    [nodes_pos[u], nodes_pos[v]],
-                    color="#6DA0E1", weight=2.5, opacity=0.75,
-                    tooltip=f"MST: {u} — {v} ({d['weight']} m)"
-                ).add_to(fmap)
+        # 1. Draw MST Edges (Trace the actual roads, make them dashed!)
+        if show_mst:
+            for u, v, d in active_data["mst"].edges(data=True):
+                try:
+                    # Find the full road path between the two buildings
+                    path = get_strict_path(u, v)
+                    path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
+                    
+                    folium.PolyLine(
+                        path_coords,
+                        color="#6DA0E1", weight=3, opacity=0.8,
+                        dash_array="5, 8", # Dashed line so it doesn't hide behind the route!
+                        tooltip=f"MST: {u} — {v} ({d['weight']:.1f} m)"
+                    ).add_to(fmap)
+                except nx.NetworkXNoPath:
+                    pass
 
-        # Route — Liberty deep, thicker
-        route = best_data["route"]
-        route_coords = [nodes_pos[n] for n in route if n in nodes_pos]
-        if len(route_coords) > 1:
-            folium.PolyLine(
-                route_coords,
-                color="#5B61B2", weight=4.5, opacity=1,
-                tooltip="Delivery Route"
-            ).add_to(fmap)
-            # Step numbers
+        # 2. Draw Delivery Route (Trace the actual roads, solid line!)
+        if show_route:
+            route = active_data["route"]
             for i in range(len(route) - 1):
-                if route[i] in nodes_pos and route[i+1] in nodes_pos:
-                    mid = (
-                        (nodes_pos[route[i]][0] + nodes_pos[route[i+1]][0]) / 2,
-                        (nodes_pos[route[i]][1] + nodes_pos[route[i+1]][1]) / 2,
-                    )
-                    folium.Marker(mid, icon=folium.DivIcon(
+                try:
+                    # Find the full road path for this delivery segment
+                    u, v = route[i], route[i+1]
+
+                    # 🚨 MAKE SURE THIS LINE USES get_strict_path! 🚨
+                    path = get_strict_path(u, v)
+
+                    path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
+                    
+                    # Draw the solid route line
+                    folium.PolyLine(
+                        path_coords,
+                        color="#5B61B2", weight=4.5, opacity=0.9,
+                        tooltip=f"Step {i+1}: {u} ➔ {v}"
+                    ).add_to(fmap)
+                    
+                    # Put the Step Number marker roughly in the middle of the actual road path!
+                    mid_idx = len(path_coords) // 2
+                    mid_coord = path_coords[mid_idx]
+                    
+                    folium.Marker(mid_coord, icon=folium.DivIcon(
                         html=f'<div style="background:#5B61B2;color:#fff;border-radius:10px;'
-                             f'padding:2px 6px;font-size:9px;font-weight:700;font-family:DM Sans,sans-serif;'
-                             f'white-space:nowrap;box-shadow:0 1px 4px rgba(91,97,178,0.4);">{i+1}</div>',
+                            f'padding:2px 6px;font-size:9px;font-weight:700;font-family:DM Sans,sans-serif;'
+                            f'white-space:nowrap;box-shadow:0 1px 4px rgba(91,97,178,0.4);">{i+1}</div>',
                         icon_size=(24, 16), icon_anchor=(12, 8)
                     )).add_to(fmap)
-
+                    
+                except nx.NetworkXNoPath:
+                    pass
     # Vẽ tất cả nodes
     for node, coord in nodes_pos.items():
         cluster   = nodes_info[node]["cluster"]
@@ -479,15 +540,7 @@ with map_col:
         else:
             is_selected = node in selected_nodes
 
-        if is_inters:
-            # Giao lộ: chấm nhỏ xám
-            folium.CircleMarker(
-                location=coord, radius=4,
-                color="#9CA3AF", weight=1, fill=True,
-                fill_color="#9CA3AF", fill_opacity=0.6,
-                tooltip=node
-            ).add_to(fmap)
-        elif is_start:
+        if is_start:
             # Start: clean marker với viền Liberty
             folium.CircleMarker(
                 location=coord, radius=12,
@@ -502,6 +555,14 @@ with map_col:
                      f'white-space:nowrap;margin-top:14px;">START</div>',
                 icon_size=(40, 14), icon_anchor=(20, 0)
             )).add_to(fmap)
+        elif is_inters:
+            # Giao lộ: chấm nhỏ xám
+            folium.CircleMarker(
+                location=coord, radius=4,
+                color="#9CA3AF", weight=1, fill=True,
+                fill_color="#9CA3AF", fill_opacity=0.6,
+                tooltip=node
+            ).add_to(fmap)
         elif is_selected:
             # Được chọn: tròn lớn màu cluster, viền trắng
             folium.CircleMarker(
@@ -636,15 +697,21 @@ with info_col:
         st.divider()
 
         # ── Delivery order ────────────────────────────────────────────────────
-        st.markdown(f"### Delivery Order &mdash; {best.title()}")
-        best_route = result[best]["route"]
+        # ── Delivery order ────────────────────────────────────────────────────
+        # Match the table to the radio button toggle!
+        selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
+        st.markdown(f"### Delivery Order &mdash; {algo_choice}")
+        
+        active_route = result[selected_key]["route"]
+        
         cumulative = 0
         route_rows = []
-        for i, node in enumerate(best_route):
+        for i, node in enumerate(active_route):
             seg = 0
             if i > 0:
                 try:
-                    seg = nx.shortest_path_length(G, source=best_route[i-1], target=node, weight="weight")
+                    # Using our strict distance!
+                    seg = get_strict_dist(active_route[i-1], node)
                 except Exception:
                     seg = 0
             cumulative += seg
@@ -659,7 +726,7 @@ with info_col:
             return f"background-color:{c}22; color:{c}; font-weight:700"
 
         styled = (df.style
-                  .map(color_cluster, subset=["Cluster"])
+                  .applymap(color_cluster, subset=["Cluster"])
                   .format({"Seg (m)": "{:,}", "Total (m)": "{:,}"})
                   .set_properties(**{"font-size": "0.78rem"}))
 
