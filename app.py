@@ -16,13 +16,10 @@ st.set_page_config(
 )
 
 # ── CSS ────────────────────────────────────────────────────────────────────────
-# Palette: Platinum #EEE2DF | Thistle #DEC1DB | Liberty #5B61B2
-#          Bleu De France #2F80E4 | Little Boy Blue #6DA0E1
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
-/* ── Root variables ── */
 :root {
     --platinum:  #EEE2DF;
     --thistle:   #DEC1DB;
@@ -42,19 +39,13 @@ html, body, [class*="css"] {
     background-color: var(--surface);
 }
 
-/* ── App background ── */
-.stApp {
-    background-color: var(--surface);
-}
+.stApp { background-color: var(--surface); }
 
-/* ── Sidebar ── */
 section[data-testid="stSidebar"] {
     background: var(--white) !important;
     border-right: 1.5px solid var(--border) !important;
 }
-section[data-testid="stSidebar"] * {
-    color: var(--ink) !important;
-}
+section[data-testid="stSidebar"] * { color: var(--ink) !important; }
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
@@ -64,7 +55,6 @@ section[data-testid="stSidebar"] h3 {
     letter-spacing: -0.01em;
 }
 
-/* Sidebar buttons */
 section[data-testid="stSidebar"] .stButton > button {
     background: var(--platinum) !important;
     color: var(--liberty) !important;
@@ -74,19 +64,14 @@ section[data-testid="stSidebar"] .stButton > button {
     font-size: 0.78rem !important;
     letter-spacing: 0.02em;
 }
-section[data-testid="stSidebar"] .stButton > button:hover {
-    background: var(--thistle) !important;
-}
+section[data-testid="stSidebar"] .stButton > button:hover { background: var(--thistle) !important; }
 
-/* ── Metric cards ── */
 [data-testid="stMetric"] {
     background: var(--white);
     border: 1.5px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
     box-shadow: 0 2px 8px rgba(91,97,178,0.07);
-    overflow: visible;
-    min-width: 0;
 }
 [data-testid="stMetricLabel"] {
     color: var(--ink-soft) !important;
@@ -95,23 +80,15 @@ section[data-testid="stSidebar"] .stButton > button:hover {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-family: 'DM Mono', monospace !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-    line-height: 1.3 !important;
 }
 [data-testid="stMetricValue"] {
     color: var(--liberty) !important;
     font-size: 1.3rem !important;
     font-weight: 700;
     font-family: 'DM Serif Display', serif !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
 }
 [data-testid="stMetricDelta"] { font-size: 0.72rem; }
 
-/* ── Page header ── */
 .page-header {
     background: linear-gradient(120deg, var(--liberty) 0%, var(--bleu) 100%);
     border-radius: 14px;
@@ -134,18 +111,14 @@ section[data-testid="stSidebar"] .stButton > button:hover {
     font-size: 1.6rem;
     font-weight: 400;
     color: white;
-    letter-spacing: -0.01em;
 }
 .page-header p {
     margin: 6px 0 0;
     font-size: 0.82rem;
     opacity: 0.82;
     color: white;
-    font-weight: 400;
-    font-family: 'DM Sans', sans-serif;
 }
 
-/* ── Section label ── */
 .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.68rem;
@@ -158,34 +131,6 @@ section[data-testid="stSidebar"] .stButton > button:hover {
     border-bottom: 1px solid var(--border);
 }
 
-/* ── Compare table ── */
-.compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    font-family: 'DM Sans', sans-serif;
-}
-.compare-table th {
-    background: var(--platinum);
-    color: var(--ink-soft);
-    padding: 9px 13px;
-    text-align: left;
-    border-bottom: 2px solid var(--thistle);
-    font-weight: 600;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-.compare-table td {
-    padding: 9px 13px;
-    border-bottom: 1px solid var(--platinum);
-    color: var(--ink);
-}
-.compare-table tr:last-child td { border-bottom: none; }
-.compare-table tr:hover td { background: #F5F0FB; }
-.winner { color: var(--bleu); font-weight: 700; }
-
-/* ── Info tip ── */
 .info-tip {
     background: #EEF3FC;
     border-left: 3px solid var(--lbb);
@@ -197,43 +142,21 @@ section[data-testid="stSidebar"] .stButton > button:hover {
     line-height: 1.5;
 }
 
-/* ── Primary button ── */
 .stButton > button[kind="primary"] {
     background: linear-gradient(120deg, var(--liberty), var(--bleu)) !important;
     color: white !important;
     border: none !important;
     border-radius: 10px !important;
     font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    letter-spacing: 0.02em !important;
     padding: 0.55rem 1.2rem !important;
     box-shadow: 0 3px 12px rgba(47,128,228,0.3) !important;
-    transition: box-shadow 0.2s ease !important;
 }
 .stButton > button[kind="primary"]:hover {
     box-shadow: 0 5px 18px rgba(47,128,228,0.45) !important;
 }
 
-/* ── Headings in main area ── */
-.stMarkdown h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--liberty);
-    letter-spacing: -0.01em;
-    margin-bottom: 10px;
-}
-
-/* ── Divider ── */
 hr { border-color: var(--border) !important; }
-
-/* ── Checkbox ── */
-.stCheckbox > label {
-    font-size: 0.84rem !important;
-    color: var(--ink) !important;
-}
-
-/* ── Selectbox / toggle labels ── */
+.stCheckbox > label { font-size: 0.84rem !important; color: var(--ink) !important; }
 .stSelectbox label, .stToggle label {
     font-size: 0.78rem !important;
     font-weight: 600 !important;
@@ -242,14 +165,10 @@ hr { border-color: var(--border) !important; }
     letter-spacing: 0.05em;
 }
 
-/* ── Dataframe ── */
 [data-testid="stDataFrame"] {
     border: 1.5px solid var(--border) !important;
     border-radius: 10px !important;
-    overflow: hidden;
 }
-
-/* ── Download button ── */
 .stDownloadButton > button {
     background: var(--platinum) !important;
     color: var(--liberty) !important;
@@ -265,31 +184,26 @@ hr { border-color: var(--border) !important; }
 nodes_pos, raw_edges, nodes_info = get_graph_data()
 G = build_graph(raw_edges)
 
-# 🛑 FIX: Force buildings to be dead-ends (Leaf Nodes)
+# Force buildings to be dead-ends (Leaf Nodes)
 for node in list(G.nodes()):
     if nodes_info[node]["cluster"] != "Road":
         edges = list(G.edges(node, data=True))
         if len(edges) > 1:
-            # Keep only the shortest walkway to the main road
             best_edge = min(edges, key=lambda x: x[2]["weight"])
-            # Remove all other fake "through-routes"
             for e in edges:
                 if e[:2] != best_edge[:2] and e[:2] != (best_edge[1], best_edge[0]):
                     G.remove_edge(e[0], e[1])
 
 def get_strict_dist(u, v):
-    """Calculates distance without routing through other buildings."""
     road_nodes = [n for n in G.nodes if nodes_info[n]["cluster"] == "Road"]
-    safe_G = G.subgraph(road_nodes + [u, v]) # Only roads + the 2 targets!
+    safe_G = G.subgraph(road_nodes + [u, v]) 
     return nx.shortest_path_length(safe_G, source=u, target=v, weight="weight")
 
 def get_strict_path(u, v):
-    """Gets the actual map coordinates without routing through other buildings."""
     road_nodes = [n for n in G.nodes if nodes_info[n]["cluster"] == "Road"]
     safe_G = G.subgraph(road_nodes + [u, v])
     return nx.shortest_path(safe_G, source=u, target=v, weight="weight")
 
-# Tách buildings và intersections
 all_buildings  = sorted([n for n in nodes_pos if not n.startswith("Inters_")])
 by_cluster     = {}
 for n in all_buildings:
@@ -304,11 +218,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Sidebar: chọn tòa ─────────────────────────────────────────────────────────
+# ── Sidebar ─────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## Select Buildings")
 
-    # Quick-select
     col_a, col_b = st.columns(2)
     if col_a.button("Select All", use_container_width=True):
         for n in all_buildings:
@@ -344,17 +257,16 @@ with st.sidebar:
     st.markdown('<div class="section-label">Settings</div>', unsafe_allow_html=True)
     
     START_OPTIONS = [
-        "Entrance_Main", 
-        "Inters_pt_ad1", 
-        "Inters_ad2_ad3", 
-        "Inters_ad3_ad5", 
-        "Inters_ad_ad5"
+        "Entrance_Main", "Inters_pt_ad1", "Inters_ad2_ad3", 
+        "Inters_ad3_ad5", "Inters_ad_ad5"
     ]
     
-    start_node = st.selectbox(
-        "Start point",
-        START_OPTIONS + selected_nodes,
-        index=0,
+    start_node = st.selectbox("Start point", START_OPTIONS + selected_nodes, index=0)
+
+    urgent_nodes = st.multiselect(
+        "🚨 Urgent Deliveries (Priority):",
+        options=selected_nodes,
+        help="These nodes will be routed first before the rest."
     )
     
     show_all_edges = st.toggle("Show all graph edges", value=False)
@@ -371,7 +283,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# ── Nút tính ──────────────────────────────────────────────────────────────────
+# ── Compute Button ──────────────────────────────────────────────────────────────────
 _, btn_col, _ = st.columns([1, 2, 1])
 with btn_col:
     compute = st.button(
@@ -384,85 +296,98 @@ with btn_col:
 if len(selected_nodes) < 2:
     st.info("Select at least **2 buildings** from the sidebar to begin.")
 
-# ── Compute ───────────────────────────────────────────────────────────────────
+# ── Compute Logic ───────────────────────────────────────────────────────────────────
 result = None
 if compute and len(selected_nodes) >= 2:
     
-# 1. Define our mandatory stops (Start + Selected Buildings)
-    targets = list(selected_nodes)
-    if start_node not in targets:
-        targets.insert(0, start_node)
+    normal_nodes = [n for n in selected_nodes if n not in urgent_nodes]
+
+    def solve_phase(start_pt, dest_nodes, algo_name):
+        if not dest_nodes: 
+            return [start_pt], 0, nx.Graph()
+            
+        targs = list(dest_nodes)
+        if start_pt not in targs: 
+            targs.insert(0, start_pt)
+            
+        wg = nx.Graph()
+        for n in targs: wg.add_node(n)
+        for i, u in enumerate(targs):
+            for v in targs[i+1:]:
+                try: 
+                    wg.add_edge(u, v, weight=get_strict_dist(u, v))
+                except Exception: 
+                    pass
+                    
+        mst = nx.minimum_spanning_tree(wg, algorithm=algo_name, weight="weight")
+        route = get_delivery_route(mst, start_node=start_pt, required_stops=targs)
+        cost = sum(get_strict_dist(route[i], route[i+1]) for i in range(len(route)-1))
+        return route, cost, mst
+
+    def get_full_solution(algo_name):
+        if not urgent_nodes:
+            r, c, m = solve_phase(start_node, selected_nodes, algo_name)
+            return {"u_route": [], "u_mst": nx.Graph(), "n_route": r, "n_mst": m, "f_route": r, "f_cost": c}
+            
+        u_route, u_cost, u_mst = solve_phase(start_node, urgent_nodes, algo_name)
         
-    # 2. Build a brand new "Target Graph" 
-    work_graph = nx.Graph()
-    for node in targets:
-        work_graph.add_node(node)
+        handoff_node = u_route[-1]
+        n_route, n_cost, n_mst = solve_phase(handoff_node, normal_nodes, algo_name)
         
-    # 3. Connect every target to every other target using the SHORTEST real route
-    for i, u in enumerate(targets):
-        for v in targets[i+1:]:
-            try:
-                # Calculate true driving distance using the FULL map (G)
-                dist = nx.shortest_path_length(G, source=u, target=v, weight="weight")
-                work_graph.add_edge(u, v, weight=dist)
-            except nx.NetworkXNoPath:
-                pass
-
-    kruskal_mst = nx.minimum_spanning_tree(work_graph, algorithm="kruskal", weight="weight")
-    prim_mst    = nx.minimum_spanning_tree(work_graph, algorithm="prim",    weight="weight")
-
-    k_route = get_delivery_route(kruskal_mst, start_node=start_node, required_stops=selected_nodes)
-    p_route = get_delivery_route(prim_mst,    start_node=start_node, required_stops=selected_nodes)
-
-    # UPDATED: Calculate cost manually using strict distance!
-    k_cost = sum(get_strict_dist(k_route[i], k_route[i+1]) for i in range(len(k_route)-1))
-    p_cost = sum(get_strict_dist(p_route[i], p_route[i+1]) for i in range(len(p_route)-1))
+        f_route = u_route + n_route[1:] if len(n_route) > 1 else u_route
+        f_cost = u_cost + n_cost
+        
+        return {
+            "u_route": u_route, "u_mst": u_mst, 
+            "n_route": n_route, "n_mst": n_mst, 
+            "f_route": f_route, "f_cost": f_cost
+        }
 
     result = {
-        "kruskal": {"mst": kruskal_mst, "route": k_route, "cost": k_cost,
-                    "mst_weight": get_mst_weight(kruskal_mst)},
-        "prim":    {"mst": prim_mst,    "route": p_route,  "cost": p_cost,
-                    "mst_weight": get_mst_weight(prim_mst)},
-        "selected": selected_nodes,
-        "start":    start_node,
-        "best":     "kruskal" if k_cost <= p_cost else "prim",
+        "kruskal": get_full_solution("kruskal"),
+        "prim":    get_full_solution("prim"),
+        "selected": selected_nodes
     }
     st.session_state["result"] = result
 
-# Giữ result giữa các lần rerun
 if "result" in st.session_state and result is None:
     result = st.session_state["result"]
 
-# ── Layout chính ──────────────────────────────────────────────────────────────
+# ── Main Layout ──────────────────────────────────────────────────────────────
 map_col, info_col = st.columns([3, 2])
 
 with map_col:
-    # Metrics
     if result:
-        best   = result["best"]
-        b_data = result[best]
-        other  = "prim" if best == "kruskal" else "kruskal"
-        o_data = result[other]
+        selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
+        other_key    = "prim" if selected_key == "kruskal" else "kruskal"
+        
+        b_data = result[selected_key]
+        o_data = result[other_key]
+        
+        # Calculate mathematical absolute best
+        best_math_algo = "Kruskal" if result["kruskal"]["f_cost"] <= result["prim"]["f_cost"] else "Prim"
+
+        active_mst_weight = (
+            sum(d['weight'] for u, v, d in b_data["u_mst"].edges(data=True)) + 
+            sum(d['weight'] for u, v, d in b_data["n_mst"].edges(data=True))
+        )
 
         mc1, mc2, mc3, mc4 = st.columns(4)
         mc1.metric("Buildings", len(result["selected"]))
-        mc2.metric("MST Weight", f"{b_data['mst_weight']:,} m")
-        mc3.metric("Route Distance", f"{b_data['cost']:,} m",
-                   delta=f"-{o_data['cost'] - b_data['cost']:,} m vs {other.title()}" if b_data['cost'] < o_data['cost'] else None)
-        mc4.metric("Best Algorithm", best.title())
+        mc2.metric("MST Weight", f"{active_mst_weight:,.1f} m")
+        
+        cost_diff = o_data['f_cost'] - b_data['f_cost']
+        delta_str = f"{-cost_diff:,.1f} m vs {other_key.title()}" if cost_diff > 0 else None
+        
+        mc3.metric("Route Distance", f"{b_data['f_cost']:,.1f} m", delta=delta_str)
+        mc4.metric("Best Algorithm", best_math_algo)
         st.markdown("")
 
-    # Map
     center_lat = sum(v[0] for v in nodes_pos.values()) / len(nodes_pos)
     center_lon = sum(v[1] for v in nodes_pos.values()) / len(nodes_pos)
 
-    fmap = folium.Map(
-        location=[center_lat, center_lon],
-        zoom_start=17,
-        tiles="CartoDB positron",
-    )
+    fmap = folium.Map(location=[center_lat, center_lon], zoom_start=17, tiles="CartoDB positron")
 
-    # Tất cả cạnh (mờ)
     if show_all_edges:
         for u, v, d in G.edges(data=True):
             folium.PolyLine(
@@ -471,83 +396,64 @@ with map_col:
                 tooltip=f"{u} ↔ {v}: {d['weight']} m"
             ).add_to(fmap)
 
-    # MST + route nếu đã tính
-    # MST + route nếu đã tính
     if result:
-    # Get the data for the algorithm the user selected!
         selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
         active_data = result[selected_key]
 
-        # 1. Draw MST Edges (Trace the actual roads, make them dashed!)
         if show_mst:
-            for u, v, d in active_data["mst"].edges(data=True):
-                try:
-                    # Find the full road path between the two buildings
-                    path = get_strict_path(u, v)
-                    path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
-                    
-                    folium.PolyLine(
-                        path_coords,
-                        color="#6DA0E1", weight=3, opacity=0.8,
-                        dash_array="5, 8", # Dashed line so it doesn't hide behind the route!
-                        tooltip=f"MST: {u} — {v} ({d['weight']:.1f} m)"
-                    ).add_to(fmap)
-                except nx.NetworkXNoPath:
-                    pass
+            def draw_mst(mst_graph, edge_color):
+                for u, v, d in mst_graph.edges(data=True):
+                    try:
+                        path = get_strict_path(u, v)
+                        path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
+                        folium.PolyLine(
+                            path_coords, color=edge_color, weight=3, opacity=0.8,
+                            dash_array="5, 8", tooltip=f"MST: {u} — {v} ({d['weight']:.1f} m)"
+                        ).add_to(fmap)
+                    except nx.NetworkXNoPath:
+                        pass
+            
+            draw_mst(active_data["n_mst"], "#6DA0E1") 
+            draw_mst(active_data["u_mst"], "#FF4B4B") 
 
-        # 2. Draw Delivery Route (Trace the actual roads, solid line!)
         if show_route:
-            route = active_data["route"]
-            for i in range(len(route) - 1):
-                try:
-                    # Find the full road path for this delivery segment
-                    u, v = route[i], route[i+1]
+            def draw_route(route_list, line_color, start_step):
+                for i in range(len(route_list) - 1):
+                    try:
+                        u, v = route_list[i], route_list[i+1]
+                        path = get_strict_path(u, v)
+                        path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
+                        
+                        folium.PolyLine(
+                            path_coords, color=line_color, weight=4.5, opacity=0.9,
+                            tooltip=f"Step {start_step + i}: {u} ➔ {v}"
+                        ).add_to(fmap)
+                        
+                        mid_coord = path_coords[len(path_coords) // 2]
+                        folium.Marker(mid_coord, icon=folium.DivIcon(
+                            html=f'<div style="background:{line_color};color:#fff;border-radius:10px;'
+                                 f'padding:2px 6px;font-size:9px;font-weight:700;font-family:DM Sans,sans-serif;'
+                                 f'white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.4);">{start_step + i}</div>',
+                            icon_size=(24, 16), icon_anchor=(12, 8)
+                        )).add_to(fmap)
+                    except nx.NetworkXNoPath:
+                        pass
+            
+            draw_route(active_data["n_route"], "#5B61B2", start_step=len(active_data["u_route"]) if active_data["u_route"] else 1) 
+            if active_data["u_route"]:
+                draw_route(active_data["u_route"], "#E63946", start_step=1)
 
-                    # 🚨 MAKE SURE THIS LINE USES get_strict_path! 🚨
-                    path = get_strict_path(u, v)
-
-                    path_coords = [nodes_pos[n] for n in path if n in nodes_pos]
-                    
-                    # Draw the solid route line
-                    folium.PolyLine(
-                        path_coords,
-                        color="#5B61B2", weight=4.5, opacity=0.9,
-                        tooltip=f"Step {i+1}: {u} ➔ {v}"
-                    ).add_to(fmap)
-                    
-                    # Put the Step Number marker roughly in the middle of the actual road path!
-                    mid_idx = len(path_coords) // 2
-                    mid_coord = path_coords[mid_idx]
-                    
-                    folium.Marker(mid_coord, icon=folium.DivIcon(
-                        html=f'<div style="background:#5B61B2;color:#fff;border-radius:10px;'
-                            f'padding:2px 6px;font-size:9px;font-weight:700;font-family:DM Sans,sans-serif;'
-                            f'white-space:nowrap;box-shadow:0 1px 4px rgba(91,97,178,0.4);">{i+1}</div>',
-                        icon_size=(24, 16), icon_anchor=(12, 8)
-                    )).add_to(fmap)
-                    
-                except nx.NetworkXNoPath:
-                    pass
-    # Vẽ tất cả nodes
     for node, coord in nodes_pos.items():
         cluster   = nodes_info[node]["cluster"]
         color     = CLUSTER_COLORS.get(cluster, "#9CA3AF")
         is_inters = node.startswith("Inters_")
         is_start  = (node == start_node)
-
-        if result:
-            is_selected = node in result["selected"]
-        else:
-            is_selected = node in selected_nodes
+        is_selected = node in result["selected"] if result else node in selected_nodes
 
         if is_start:
-            # Start: clean marker với viền Liberty
             folium.CircleMarker(
-                location=coord, radius=12,
-                color="#5B61B2", weight=3,
-                fill=True, fill_color="#2F80E4", fill_opacity=1,
-                tooltip=f"Start: {node}",
-                popup=node
+                location=coord, radius=12, color="#5B61B2", weight=3,
+                fill=True, fill_color="#2F80E4", fill_opacity=1, tooltip=f"Start: {node}", popup=node
             ).add_to(fmap)
             folium.Marker(coord, icon=folium.DivIcon(
                 html=f'<div style="font-size:8px;font-weight:700;color:#1C1B2E;font-family:DM Mono,monospace;'
@@ -556,23 +462,16 @@ with map_col:
                 icon_size=(40, 14), icon_anchor=(20, 0)
             )).add_to(fmap)
         elif is_inters:
-            # Giao lộ: chấm nhỏ xám
             folium.CircleMarker(
-                location=coord, radius=4,
-                color="#9CA3AF", weight=1, fill=True,
-                fill_color="#9CA3AF", fill_opacity=0.6,
-                tooltip=node
+                location=coord, radius=4, color="#9CA3AF", weight=1, fill=True,
+                fill_color="#9CA3AF", fill_opacity=0.6, tooltip=node
             ).add_to(fmap)
         elif is_selected:
-            # Được chọn: tròn lớn màu cluster, viền trắng
             folium.CircleMarker(
-                location=coord, radius=10,
-                color="#FFFFFF", weight=2.5,
-                fill=True, fill_color=color, fill_opacity=1,
-                tooltip=node,
+                location=coord, radius=10, color="#FFFFFF", weight=2.5,
+                fill=True, fill_color=color, fill_opacity=1, tooltip=node,
                 popup=folium.Popup(f"<b>{node}</b><br>Cluster: {cluster}", max_width=150)
             ).add_to(fmap)
-            # Label
             folium.Marker(coord, icon=folium.DivIcon(
                 html=f'<div style="font-size:9px;font-weight:700;color:#111;'
                      f'text-shadow:0 0 3px #fff,-1px 0 #fff,0 1px #fff,1px 0 #fff,0 -1px #fff;'
@@ -580,17 +479,13 @@ with map_col:
                 icon_size=(60, 14), icon_anchor=(30, -6)
             )).add_to(fmap)
         else:
-            # Không chọn: tròn nhỏ mờ
             folium.CircleMarker(
-                location=coord, radius=6,
-                color=color, weight=1.5,
-                fill=True, fill_color=color, fill_opacity=0.3,
-                tooltip=node
+                location=coord, radius=6, color=color, weight=1.5,
+                fill=True, fill_color=color, fill_opacity=0.3, tooltip=node
             ).add_to(fmap)
 
     st_folium(fmap, width=None, height=530, returned_objects=[])
 
-    # ── Map Legend ────────────────────────────────────────────────────────────
     legend_items = []
     CLUSTER_ORDER_LEGEND = ["S6", "S7", "S8", "S9", "S10"]
     for cl in CLUSTER_ORDER_LEGEND:
@@ -599,27 +494,22 @@ with map_col:
             f'<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;">'
             f'<span style="width:12px;height:12px;border-radius:50%;background:{c};'
             f'border:2px solid #fff;box-shadow:0 0 0 1.5px {c};display:inline-block;flex-shrink:0;"></span>'
-            f'<span style="font-size:0.75rem;font-weight:600;color:#4A4869;">{cl}</span>'
-            f'</span>'
+            f'<span style="font-size:0.75rem;font-weight:600;color:#4A4869;">{cl}</span></span>'
         )
     legend_items.append(
         '<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;">'
         '<span style="width:28px;height:3px;background:#6DA0E1;display:inline-block;border-radius:2px;"></span>'
-        '<span style="font-size:0.75rem;color:#4A4869;">MST Edge</span>'
-        '</span>'
+        '<span style="font-size:0.75rem;color:#4A4869;">MST Edge</span></span>'
     )
     legend_items.append(
         '<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;">'
         '<span style="width:28px;height:4px;background:#5B61B2;display:inline-block;border-radius:2px;"></span>'
-        '<span style="font-size:0.75rem;color:#4A4869;">Delivery Route</span>'
-        '</span>'
+        '<span style="font-size:0.75rem;color:#4A4869;">Delivery Route</span></span>'
     )
     legend_items.append(
-        '<span style="display:inline-flex;align-items:center;gap:5px;">'
-        '<span style="width:14px;height:14px;border-radius:50%;background:#2F80E4;'
-        'border:2.5px solid #5B61B2;display:inline-block;flex-shrink:0;"></span>'
-        '<span style="font-size:0.75rem;color:#4A4869;">Start</span>'
-        '</span>'
+        '<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;">'
+        '<span style="width:28px;height:4px;background:#E63946;display:inline-block;border-radius:2px;"></span>'
+        '<span style="font-size:0.75rem;color:#E63946;font-weight:600;">Priority Route</span></span>'
     )
     st.markdown(
         '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;'
@@ -627,9 +517,7 @@ with map_col:
         'padding:9px 14px;margin-top:6px;">'
         '<span style="font-family:DM Mono,monospace;font-size:0.62rem;font-weight:600;'
         'color:#9CA3AF;letter-spacing:0.08em;text-transform:uppercase;margin-right:10px;">Legend</span>'
-        + "".join(legend_items) +
-        '</div>',
-        unsafe_allow_html=True
+        + "".join(legend_items) + '</div>', unsafe_allow_html=True
     )
 
 with info_col:
@@ -637,101 +525,68 @@ with info_col:
         st.markdown("""
         <div style="text-align:center;padding:60px 20px;color:#9CA3AF;">
           <div style="font-family:'DM Serif Display',serif;font-size:2.5rem;color:#DEC1DB;letter-spacing:-0.02em;">Origami</div>
-          <div style="font-size:0.95rem;font-weight:500;margin-top:16px;color:#4A4869;">
-            No route calculated yet
-          </div>
-          <div style="font-size:0.82rem;margin-top:6px;color:#9CA3AF;">
-            Select buildings from the sidebar and click <b>Calculate Optimal Route</b>
-          </div>
+          <div style="font-size:0.95rem;font-weight:500;margin-top:16px;color:#4A4869;">No route calculated yet</div>
+          <div style="font-size:0.82rem;margin-top:6px;color:#9CA3AF;">Select buildings from the sidebar and click <b>Calculate Optimal Route</b></div>
         </div>
         """, unsafe_allow_html=True)
-    else:
-        best  = result["best"]
-        other = "prim" if best == "kruskal" else "kruskal"
-
-        # ── Algorithm comparison ──────────────────────────────────────────────
-        st.markdown("### Algorithm Comparison")
-        k = result["kruskal"]
-        p = result["prim"]
-        k_win_mst   = "+" if k["mst_weight"] <= p["mst_weight"] else ""
-        p_win_mst   = "+" if p["mst_weight"] <= k["mst_weight"] else ""
-        k_win_route = "+" if k["cost"] <= p["cost"] else ""
-        p_win_route = "+" if p["cost"] <= k["cost"] else ""
-
+    
+    if result:
+        k_cost = result["kruskal"]["f_cost"]
+        p_cost = result["prim"]["f_cost"]
+        selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
+        k_bg = "#DEC1DB" if selected_key == "kruskal" else "#EEE2DF"
+        p_bg = "#DEC1DB" if selected_key == "prim" else "#EEE2DF"
+        
         st.markdown(f"""
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Kruskal {k_win_mst if k_win_mst and k_win_route else ""}</th>
-              <th>Prim {p_win_mst if p_win_mst and p_win_route else ""}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>MST Weight</td>
-              <td class="{'winner' if k_win_mst else ''}">{k['mst_weight']:,} m {k_win_mst}</td>
-              <td class="{'winner' if p_win_mst else ''}">{p['mst_weight']:,} m {p_win_mst}</td>
-            </tr>
-            <tr>
-              <td>Route Distance</td>
-              <td class="{'winner' if k_win_route else ''}">{k['cost']:,} m {k_win_route}</td>
-              <td class="{'winner' if p_win_route else ''}">{p['cost']:,} m {p_win_route}</td>
-            </tr>
-            <tr>
-              <td>Stops</td>
-              <td>{len(k['route'])}</td>
-              <td>{len(p['route'])}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="display:flex; gap:10px; margin-bottom:15px; align-items: stretch;">
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; background-color: {k_bg}; padding: 15px; border-radius: 8px; border: 2px solid {'#5B61B2' if selected_key == 'kruskal' else 'transparent'};">
+                <h4 style="margin-top:0; margin-bottom:10px; color: #1C1B2E; font-family: 'DM Serif Display', serif; font-size: 1.25rem; font-weight: 400; letter-spacing: -0.01em; white-space: nowrap;">Kruskal's Route</h4>
+                <p style="margin:0; font-size:1.1rem;">Total Distance: <b>{k_cost:,.1f} m</b></p>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; background-color: {p_bg}; padding: 15px; border-radius: 8px; border: 2px solid {'#5B61B2' if selected_key == 'prim' else 'transparent'};">
+                <h4 style="margin-top:0; margin-bottom:10px; color: #1C1B2E; font-family: 'DM Serif Display', serif; font-size: 1.25rem; font-weight: 400; letter-spacing: -0.01em; white-space: nowrap;">Prim's Route</h4>
+                <p style="margin:0; font-size:1.1rem;">Total Distance: <b>{p_cost:,.1f} m</b></p>
+            </div>
+        </div>
         """, unsafe_allow_html=True)
 
-        st.markdown(
-            f'<div style="margin-top:8px;font-size:0.8rem;color:#2F80E4;font-weight:600;">'
-            f'Best algorithm for this delivery: <b>{best.title()}</b>'
-            f' (saves {abs(k["cost"] - p["cost"]):,} m)</div>',
-            unsafe_allow_html=True
-        )
-
-        st.divider()
-
-        # ── Delivery order ────────────────────────────────────────────────────
-        # ── Delivery order ────────────────────────────────────────────────────
-        # Match the table to the radio button toggle!
-        selected_key = "kruskal" if algo_choice == "Kruskal" else "prim"
-        st.markdown(f"### Delivery Order &mdash; {algo_choice}")
+        st.markdown(f"""
+        <h3 style="font-family: 'DM Serif Display', serif; color: #5B61B2; margin-top: 10px; margin-bottom: 15px; font-weight: 400; letter-spacing: -0.01em;">
+            Delivery Order &mdash; {algo_choice}
+        </h3>
+        """, unsafe_allow_html=True)
         
-        active_route = result[selected_key]["route"]
+        active_route = result[selected_key]["f_route"]
         
         cumulative = 0
         route_rows = []
         for i, node in enumerate(active_route):
             seg = 0
             if i > 0:
-                try:
-                    # Using our strict distance!
-                    seg = get_strict_dist(active_route[i-1], node)
-                except Exception:
-                    seg = 0
+                try: seg = get_strict_dist(active_route[i-1], node)
+                except Exception: seg = 0
             cumulative += seg
-            route_rows.append({"Stop": i+1, "Node": node,
-                                "Cluster": nodes_info[node]["cluster"],
-                                "Seg (m)": seg, "Total (m)": cumulative})
+            
+            # Label priority nodes in the table
+            is_urgent = "🚨 " if node in urgent_nodes else ""
+            route_rows.append({
+                "Stop": i+1, 
+                "Node": is_urgent + node,
+                "Cluster": nodes_info[node]["cluster"],
+                "Seg (m)": seg, 
+                "Total (m)": cumulative
+            })
 
         df = pd.DataFrame(route_rows)
-
         def color_cluster(val):
             c = CLUSTER_COLORS.get(val, "#888")
             return f"background-color:{c}22; color:{c}; font-weight:700"
 
         styled = (df.style
-                  .applymap(color_cluster, subset=["Cluster"])
+                  .map(color_cluster, subset=["Cluster"])
                   .format({"Seg (m)": "{:,}", "Total (m)": "{:,}"})
                   .set_properties(**{"font-size": "0.78rem"}))
 
         st.dataframe(styled, use_container_width=True, height=320)
-
         csv = df.to_csv(index=False).encode("utf-8")
-        st.download_button("Export CSV", csv, "delivery_route.csv", "text/csv",
-                           use_container_width=True)
+        st.download_button("Export CSV", csv, "delivery_route.csv", "text/csv", use_container_width=True)
